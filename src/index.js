@@ -1,8 +1,8 @@
 import express from "express";
+import morgan from "morgan"; 
+import cors from "cors"; 
 
-import morgan from "morgan"; 14.2k (gzipped: 5.3k)
-
-import cors from "cors"; 5k (gzipped: 2.1k)
+import userRoutes from "./routes/userRoutes.js";
 
 //1 Iniciar la aplicación
 
@@ -21,6 +21,8 @@ app.use(cors()); // CROSS-ORIGIN-RESOURCE-SHARING
 app.use(express.json());
 
 // 4 Configurar las rutas 
+
+app.use(userRoutes)
 
 //5 Iniciar el loop del servidor
 
