@@ -26,6 +26,6 @@ app.use(userRoutes);
 
 // 5 Iniciar el loop del servidor
 
-app.listen(() => {
+app.listen(PORT, () => {
   console.log(`Servidor ejecutandose en el puerto ${PORT}`);
 });

@@ -2,7 +2,7 @@ import UserCollection from '../models/userSchema.js';
 
 export const getUsers = async (_, res) => {
   try {
-    const data = await UserCollection.find({});
+    const data = await UserCollection.find();
 
     res.json(data);
   } catch (e) {
@@ -36,11 +36,9 @@ export const postUser = async (req, res) => {
       });
       return;
     }
-    res
-      .status(500)
-      .json({
-        message: 'ocurrio un error guardando el usuario',
-        error: e.message,
-      });
+    res.status(500).json({
+      message: 'ocurrio un error guardando el usuario',
+      error: e.message,
+    });
   }
 };
