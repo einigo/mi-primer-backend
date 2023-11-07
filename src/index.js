@@ -1,29 +1,31 @@
-import express from "express";
+import express from 'express';
+import morgan from 'morgan';
+import cors from 'cors';
 
-import morgan from "morgan"; 14.2k (gzipped: 5.3k)
+import userRoutes from './routes/userRoutes.js';
 
-import cors from "cors"; 5k (gzipped: 2.1k)
+import './database/database.js'; // conexión con base de datos
 
-//1 Iniciar la aplicación
+// 1 Iniciar la aplicación
 
 const app = express();
 
-//2 Configuraciones generales
+// 2 Configuraciones generales
 
 const PORT = process.env.PORT || 5000;
 
-console.log(process.env);
+// 3 Middlewares
 
-// 3 Middlewares 
-
-app.use(morgan("dev"));
+app.use(morgan('dev'));
 app.use(cors()); // CROSS-ORIGIN-RESOURCE-SHARING
 app.use(express.json());
 
-// 4 Configurar las rutas 
+// 4 Configurar las rutas
 
-//5 Iniciar el loop del servidor
+app.use(userRoutes);
 
-app.listen(()=>{
-    console.log(`Servidor ejecutandose en el puerto ${PORT}`);
+// 5 Iniciar el loop del servidor
+
+app.listen(PORT, () => {
+  console.log(`Servidor ejecutandose en el puerto ${PORT}`);
 });
