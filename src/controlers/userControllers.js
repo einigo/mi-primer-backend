@@ -1,14 +1,21 @@
-import UserCollection from '../models/userSchema.js';
+import UserModel from '../models/userSchema.js';
+import bcrypt from 'bcryptjs';
 
 export const getUsers = async (_, res) => {
   try {
-    const data = await UserCollection.find();
+    const data = await UserModel.find({});
 
-    res.json(data);
+    const filteredData = data.map((user) => ({
+      ...user._doc,
+      password: undefined,
+    }));
+
+    res.json({ data: filteredData, message: 'Usuarios encontrados' });
   } catch (e) {
     console.error(e);
 
     res.status(500).json({
+      data: null,
       message: 'ocurrio un error al conectarse a la DB',
     });
   }
@@ -16,27 +23,34 @@ export const getUsers = async (_, res) => {
 export const postUser = async (req, res) => {
   const { body } = req;
 
-  const newUser = new UserCollection({
+  const hashedPassword = bcrypt.hashSync(body.password, 10);
+
+  const newUser = new UserModel({
     firstname: body.firstname,
     lastname: body.lastname,
     username: body.username,
-    password: body.password,
+    password: hashedPassword,
+    isActive: true,
+    isAdmin: false,
   });
 
   try {
     await newUser.save();
 
     res.status(201).json({
+      data: null,
       message: 'Usuario creado exitosamente',
     });
   } catch (e) {
-    if (e.message.incluides('duplicate')) {
-      res.statud(400).json({
+    if (e.message.includes('duplicate')) {
+      res.status(400).json({
+        data: null,
         message: 'el nombre de usuario ya está en uso',
       });
       return;
     }
     res.status(500).json({
+      data: null,
       message: 'ocurrio un error guardando el usuario',
       error: e.message,
     });
